@@ -30,12 +30,69 @@ function getEmptyCells(squares) {
   return squares.map((cell, idx) => cell === null ? idx : null).filter((n) => n !== null);
 }
 
-// Simple AI: Choose random open cell
-function getBestMove(squares) {
+/**
+ * Returns AI move index for a given difficulty.
+ * @param {array} squares - Current board state.
+ * @param {"easy"|"medium"|"hard"} difficulty - Difficulty level.
+ * @returns {number|null} - Index of move.
+ */
+function getBestMove(squares, difficulty = "easy") {
   const empties = getEmptyCells(squares);
   if (empties.length === 0) return null;
-  // Optional: Implement minimax or smarter AI for harder mode
+  // Easy: Random
+  if (difficulty === "easy") {
+    return empties[Math.floor(Math.random() * empties.length)];
+  }
+  // Hard: Minimax optimal
+  if (difficulty === "hard") {
+    const move = minimaxBestMove(squares, "O").idx;
+    return move !== undefined ? move : empties[Math.floor(Math.random() * empties.length)];
+  }
+  // Medium: 50% optimal, 50% random
+  if (difficulty === "medium") {
+    if (Math.random() < 0.5) {
+      return minimaxBestMove(squares, "O").idx;
+    }
+    return empties[Math.floor(Math.random() * empties.length)];
+  }
   return empties[Math.floor(Math.random() * empties.length)];
+}
+
+/**
+ * Minimax algorithm for Tic Tac Toe (for "O" AI)
+ * @param {array} squares 
+ * @param {"X"|"O"} player 
+ * @returns {object} { idx, score }
+ */
+function minimaxBestMove(squares, player) {
+  const winner = calculateWinner(squares);
+  if (winner === "O") return { score: 1 };
+  if (winner === "X") return { score: -1 };
+  if (isBoardFull(squares)) return { score: 0 };
+  const empties = getEmptyCells(squares);
+  let best;
+  if (player === "O") {
+    best = { score: -Infinity, idx: null };
+    for (let idx of empties) {
+      const newSquares = [...squares];
+      newSquares[idx] = "O";
+      const opp = minimaxBestMove(newSquares, "X");
+      if (opp.score > best.score) {
+        best = { score: opp.score, idx };
+      }
+    }
+  } else {
+    best = { score: Infinity, idx: null };
+    for (let idx of empties) {
+      const newSquares = [...squares];
+      newSquares[idx] = "X";
+      const opp = minimaxBestMove(newSquares, "O");
+      if (opp.score < best.score) {
+        best = { score: opp.score, idx };
+      }
+    }
+  }
+  return best;
 }
 
 // Player marks
@@ -53,10 +110,14 @@ function getCellColor(value) {
   return "#fff";
 }
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * Main App component for Tic Tac Toe game.
+ */
 function App() {
   // State management for game
   const [mode, setMode] = useState("pvp"); // "pvp" or "pvc"
+  const [difficulty, setDifficulty] = useState("easy"); // "easy", "medium", "hard"
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState(true); // Boolean: if true, X's move
   const [winner, setWinner] = useState(null);
@@ -99,7 +160,7 @@ function App() {
   React.useEffect(() => {
     if (mode === "pvc" && !xIsNext && gameActive && !winner) {
       const timer = setTimeout(() => {
-        const move = getBestMove(squares);
+        const move = getBestMove(squares, difficulty);
         if (move !== null) {
           const newSquares = squares.slice();
           newSquares[move] = PLAYER_O;
@@ -110,7 +171,7 @@ function App() {
       return () => clearTimeout(timer);
     }
     // eslint-disable-next-line
-  }, [mode, xIsNext, gameActive, winner, squares]);
+  }, [mode, xIsNext, gameActive, winner, squares, difficulty]);
 
   // PUBLIC_INTERFACE
   function handleClick(idx) {
@@ -127,8 +188,14 @@ function App() {
   function handleModeChange(newMode) {
     if (mode !== newMode) {
       setMode(newMode);
+      if (newMode === "pvc") setDifficulty("easy"); // reset difficulty to default for PvC
       handleReset(true);
     }
+  }
+
+  function handleDifficultyChange(e) {
+    setDifficulty(e.target.value);
+    handleReset(true);
   }
 
   // PUBLIC_INTERFACE
@@ -242,6 +309,13 @@ function App() {
             disableModeChange={!gameActive && (winner !== null)}
             isMobile={isMobile}
           />
+          {mode === "pvc" && (
+            <DifficultySelector
+              difficulty={difficulty}
+              onChange={handleDifficultyChange}
+              isMobile={isMobile}
+            />
+          )}
         </div>
       </main>
       <footer style={{
@@ -419,6 +493,61 @@ function OptionsPanel({ mode, onModeChange, onReset, disableModeChange, isMobile
       >
         Reset
       </button>
+    </div>
+  );
+}
+
+/**
+ * PUBLIC_INTERFACE
+ * Renders a difficulty selection dropdown for Player vs Computer mode.
+ * @param {object} props - { difficulty, onChange, isMobile }
+ */
+function DifficultySelector({ difficulty, onChange, isMobile }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: isMobile ? "flex-start" : "center",
+        alignItems: "center",
+        marginTop: isMobile ? 18 : 22,
+        marginBottom: isMobile ? 5 : 16,
+        gap: 10,
+        fontWeight: 500
+      }}
+    >
+      <label
+        htmlFor="difficulty"
+        style={{
+          color: "#222",
+          marginRight: 7,
+          fontSize: "1.05em",
+          fontWeight: 600,
+          letterSpacing: ".01em"
+        }}
+      >
+        Computer Difficulty:
+      </label>
+      <select
+        id="difficulty"
+        value={difficulty}
+        onChange={onChange}
+        style={{
+          background: "#FAFAFA",
+          color: "#222",
+          borderRadius: 7,
+          border: "1.4px solid #b2d7fd",
+          fontWeight: 510,
+          fontSize: "1em",
+          padding: "5.8px 13px",
+          outline: "none",
+          cursor: "pointer",
+        }}
+        aria-label="Computer difficulty"
+      >
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
     </div>
   );
 }
