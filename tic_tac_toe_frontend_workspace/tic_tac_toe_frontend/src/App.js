@@ -99,15 +99,19 @@ function minimaxBestMove(squares, player) {
 const PLAYER_X = "X";
 const PLAYER_O = "O";
 
-// Theme colors
-const COLOR_PRIMARY = "#2196F3";
-const COLOR_ACCENT = "#FF5722";
-const COLOR_SECONDARY = "#F5F5F5";
+// Retro Nintendo Theme colors
+const COLOR_PRIMARY = "#dc143c";      // Nintendo Red
+const COLOR_SECONDARY = "#0066cc";    // Nintendo Blue
+const COLOR_ACCENT = "#00a86b";       // Nintendo Green
+const COLOR_BACKGROUND = "#1a1a1a";   // Dark background
+const COLOR_SCREEN = "#9bbc0f";       // Game Boy screen green
+const COLOR_SCREEN_DARK = "#306230";  // Darker screen green
+const COLOR_YELLOW = "#ffd700";       // Nintendo Yellow
 
 function getCellColor(value) {
   if (value === PLAYER_X) return COLOR_PRIMARY;
-  if (value === PLAYER_O) return COLOR_ACCENT;
-  return "#fff";
+  if (value === PLAYER_O) return COLOR_SECONDARY;
+  return COLOR_SCREEN_DARK;
 }
 
 /**
@@ -212,23 +216,15 @@ function App() {
   }
 
   return (
-    <div className="app" style={{
-      minHeight: "100vh",
-      background: COLOR_SECONDARY,
-      color: "#222"
-    }}>
-      <nav className="navbar" style={{
-        background: "#fff",
-        borderBottom: `1.5px solid ${COLOR_PRIMARY}`,
-        color: "#333"
-      }}>
+    <div className="app">
+      <nav className="navbar">
         <div className="container">
           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: "center" }}>
-            <div className="logo" style={{color: COLOR_ACCENT}}>
-              <span className="logo-symbol" style={{color: COLOR_PRIMARY}}>&#x25A3;</span>
-              Tic Tac Toe
+            <div className="logo">
+              <span className="logo-symbol">🎮</span>
+              TIC TAC TOE
             </div>
-            <span style={{fontWeight: 500, color: "#666", marginRight: 4}}>by KAVIA</span>
+            <span style={{fontSize: '8px', color: COLOR_YELLOW, textShadow: '1px 1px 0 rgba(0,0,0,0.8)'}}>BY KAVIA</span>
           </div>
         </div>
       </nav>
@@ -239,61 +235,41 @@ function App() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: isMobile ? "flex-start" : "center",
-        marginTop: isMobile ? 96 : 0,
+        marginTop: isMobile ? 96 : 80,
         paddingBottom: 60,
         minHeight: "93vh"
       }}>
-        <div className="container" style={{maxWidth: 480}}>
+        <div className="container" style={{maxWidth: 600}}>
           <section style={{
-            textAlign: "center", marginTop: 60,
-            marginBottom: 18
+            textAlign: "center", marginTop: 40,
+            marginBottom: 20
           }}>
-            <div className="subtitle" style={{
-              color: COLOR_ACCENT,
-              marginBottom: 4,
-              fontWeight: 600,
-              fontSize: "1.07em"
-            }}>
-              {mode === "pvp" ? "Player vs Player" : "Player vs Computer"}
+            <div className="subtitle">
+              {mode === "pvp" ? "PLAYER VS PLAYER" : "PLAYER VS COMPUTER"}
             </div>
-            <h1 className="title"
-              style={{
-                fontSize: isMobile ? "2.25rem" : "2.9rem",
-                margin: "3px 0 4px 0",
-                color: COLOR_PRIMARY
-              }}
-            >
-              Tic Tac Toe
+            <h1 className="title">
+              TIC TAC TOE
             </h1>
-            <div className="description"
-              style={{
-                marginBottom: 7,
-                color: "#888",
-                fontSize: isMobile ? "1em" : "1.1em"
-              }}>
-              Play {mode === "pvp" ? "against a friend" : "against the computer"}!
+            <div className="description">
+              PLAY {mode === "pvp" ? "AGAINST A FRIEND" : "AGAINST THE COMPUTER"}!
               <br />
-              <span style={{
-                fontWeight: 500
-              }}>
-                First to reach 3 wins, or just play for fun.
-              </span>
+              FIRST TO REACH 3 WINS, OR JUST PLAY FOR FUN.
             </div>
           </section>
           <ScoreBoard scores={scores} />
-          <div id="game-status" style={{textAlign: "center", fontSize: "1.2rem", minHeight: 38, margin: "12px auto 20px auto"}}>
-            <strong>
+          <div className="retro-status">
+            <div style={{fontSize: isMobile ? '10px' : '12px', color: '#ffffff', textShadow: '2px 2px 0 rgba(0,0,0,0.8)'}}>
               {status}
-            </strong>
+            </div>
             {winner &&
-              <span style={{
-                display: "block",
-                color: (winner === "draw" ? "#888" : (winner === "X" ? COLOR_PRIMARY : COLOR_ACCENT)),
-                marginTop: 4,
-                fontWeight: 600
+              <div style={{
+                marginTop: 8,
+                fontSize: isMobile ? '8px' : '10px',
+                color: (winner === "draw" ? COLOR_YELLOW : (winner === "X" ? COLOR_PRIMARY : COLOR_SECONDARY)),
+                textShadow: '2px 2px 0 rgba(0,0,0,0.8)'
               }}>
-                {winner === "draw" ? "It's a draw!" : `${winner} wins!`}
-              </span>
+                {winner === "draw" ? "IT'S A DRAW!" : `${winner} WINS!`}
+              </div>
             }
           </div>
           <Board
@@ -318,14 +294,8 @@ function App() {
           )}
         </div>
       </main>
-      <footer style={{
-        textAlign: "center",
-        fontSize: "1em",
-        color: "#888",
-        marginTop: 40,
-        padding: "18px 0 9px 0"
-      }}>
-        <span>Made with <span style={{color: COLOR_ACCENT}}>&#10084;</span> using React</span>
+      <footer className="retro-footer">
+        <span>MADE WITH <span style={{color: COLOR_PRIMARY}}>♥</span> USING REACT</span>
       </footer>
     </div>
   );
@@ -343,14 +313,11 @@ function Board({ squares, onClick, isMobile, disabled }) {
       style={{
         display: "grid",
         gridTemplateColumns: "repeat(3, 1fr)",
-        gap: isMobile ? 10 : 18,
-        width: isMobile ? 280 : 340,
-        height: isMobile ? 280 : 340,
+        gap: isMobile ? 4 : 6,
+        width: isMobile ? 300 : 360,
+        height: isMobile ? 300 : 360,
         margin: "0 auto",
-        background: "#fff",
-        borderRadius: 15,
-        boxShadow: "0 2px 14px 0 rgba(30,50,100,0.11)",
-        padding: isMobile ? 10 : 16,
+        padding: isMobile ? 12 : 16,
         boxSizing: "border-box"
       }}
     >
@@ -374,24 +341,18 @@ function Board({ squares, onClick, isMobile, disabled }) {
  * @param {object} props - { value, onClick, disabled, idx, isMobile }
  */
 function Square({ value, onClick, disabled, idx, isMobile }) {
+  const squareStyle = {
+    width: isMobile ? 90 : 110,
+    height: isMobile ? 90 : 110,
+    fontSize: isMobile ? "24px" : "32px",
+    background: value ? getCellColor(value) : undefined,
+    color: value ? "#ffffff" : "#ffffff"
+  };
+
   return (
     <button
-      className="ttt-square"
-      style={{
-        width: isMobile ? 70 : 96,
-        height: isMobile ? 70 : 96,
-        background: value
-          ? getCellColor(value)
-          : "#F5F5F5",
-        color: value ? "#fff" : "#222",
-        fontSize: isMobile ? "2.2rem" : "2.7rem",
-        fontWeight: 700,
-        borderRadius: 12,
-        border: `2.2px solid #e0e0e0`,
-        boxShadow: value ? `0 0 7px 0 ${getCellColor(value)}88` : "none",
-        transition: "background 0.25s, box-shadow 0.23s",
-        cursor: disabled ? "not-allowed" : "pointer"
-      }}
+      className={`ttt-square ${value && !disabled ? 'winner-glow' : ''}`}
+      style={squareStyle}
       aria-label={`Cell ${idx + 1}${value ? `, ${value}` : ", empty"}`}
       onClick={onClick}
       disabled={disabled}
@@ -408,24 +369,25 @@ function Square({ value, onClick, disabled, idx, isMobile }) {
  */
 function ScoreBoard({ scores }) {
   return (
-    <div style={{
-      display: "flex",
-      justifyContent: "center",
-      gap: 22,
-      marginBottom: 4,
-      fontWeight: 500,
-      fontSize: "1.22em"
-    }}>
-      <span style={{
-        color: COLOR_PRIMARY
+    <div className="retro-scoreboard">
+      <div style={{
+        display: "flex",
+        justifyContent: "space-around",
+        gap: 32,
+        fontSize: "12px",
+        textShadow: '2px 2px 0 rgba(0,0,0,0.8)'
       }}>
-        X: {scores.X}
-      </span>
-      <span style={{
-        color: COLOR_ACCENT
-      }}>
-        O: {scores.O}
-      </span>
+        <span style={{
+          color: COLOR_PRIMARY
+        }}>
+          PLAYER X: {scores.X}
+        </span>
+        <span style={{
+          color: COLOR_SECONDARY
+        }}>
+          PLAYER O: {scores.O}
+        </span>
+      </div>
     </div>
   );
 }
@@ -436,63 +398,38 @@ function ScoreBoard({ scores }) {
  */
 function OptionsPanel({ mode, onModeChange, onReset, disableModeChange, isMobile }) {
   return (
-    <div style={{
-      marginTop: 23,
-      display: "flex",
-      flexDirection: isMobile ? "column" : "row",
-      gap: isMobile ? 13 : 28,
-      alignItems: isMobile ? "stretch" : "center",
-      justifyContent: "center"
-    }}>
-      <button
-        className="btn"
-        style={{
-          background: mode === "pvp" ? COLOR_PRIMARY : "#eee",
-          color: mode === "pvp" ? "#fff" : "#333",
-          borderRadius: 8,
-          fontWeight: 520,
-          minWidth: 120,
-          border: "none",
-          marginBottom: isMobile ? 0 : undefined
-        }}
-        onClick={() => onModeChange("pvp")}
-        disabled={disableModeChange && mode === "pvp"}
-        aria-label="Player vs Player"
-      >
-        2 Players
-      </button>
-      <button
-        className="btn"
-        style={{
-          background: mode === "pvc" ? COLOR_ACCENT : "#eee",
-          color: mode === "pvc" ? "#fff" : "#333",
-          borderRadius: 8,
-          fontWeight: 520,
-          minWidth: 120,
-          marginBottom: isMobile ? 0 : undefined,
-          border: "none"
-        }}
-        onClick={() => onModeChange("pvc")}
-        disabled={disableModeChange && mode === "pvc"}
-        aria-label="Player vs Computer"
-      >
-        Vs Computer
-      </button>
-      <button
-        className="btn"
-        style={{
-          background: "#f9f9f9",
-          color: COLOR_PRIMARY,
-          borderRadius: 8,
-          minWidth: 80,
-          border: `1px solid ${COLOR_PRIMARY}22`,
-          fontWeight: 500,
-        }}
-        onClick={() => onReset()}
-        aria-label="Reset game and scores"
-      >
-        Reset
-      </button>
+    <div className="retro-options">
+      <div style={{
+        display: "flex",
+        flexDirection: isMobile ? "column" : "row",
+        gap: isMobile ? 16 : 20,
+        alignItems: "center",
+        justifyContent: "center"
+      }}>
+        <button
+          className={`btn ${mode === "pvp" ? "btn-primary" : ""}`}
+          onClick={() => onModeChange("pvp")}
+          disabled={disableModeChange && mode === "pvp"}
+          aria-label="Player vs Player"
+        >
+          2 PLAYERS
+        </button>
+        <button
+          className={`btn ${mode === "pvc" ? "btn-secondary" : ""}`}
+          onClick={() => onModeChange("pvc")}
+          disabled={disableModeChange && mode === "pvc"}
+          aria-label="Player vs Computer"
+        >
+          VS COMPUTER
+        </button>
+        <button
+          className="btn btn-reset"
+          onClick={() => onReset()}
+          aria-label="Reset game and scores"
+        >
+          RESET
+        </button>
+      </div>
     </div>
   );
 }
@@ -504,50 +441,37 @@ function OptionsPanel({ mode, onModeChange, onReset, disableModeChange, isMobile
  */
 function DifficultySelector({ difficulty, onChange, isMobile }) {
   return (
-    <div
-      style={{
+    <div className="retro-difficulty">
+      <div style={{
         display: "flex",
-        justifyContent: isMobile ? "flex-start" : "center",
+        justifyContent: "center",
         alignItems: "center",
-        marginTop: isMobile ? 18 : 22,
-        marginBottom: isMobile ? 5 : 16,
-        gap: 10,
-        fontWeight: 500
-      }}
-    >
-      <label
-        htmlFor="difficulty"
-        style={{
-          color: "#222",
-          marginRight: 7,
-          fontSize: "1.05em",
-          fontWeight: 600,
-          letterSpacing: ".01em"
-        }}
-      >
-        Computer Difficulty:
-      </label>
-      <select
-        id="difficulty"
-        value={difficulty}
-        onChange={onChange}
-        style={{
-          background: "#FAFAFA",
-          color: "#222",
-          borderRadius: 7,
-          border: "1.4px solid #b2d7fd",
-          fontWeight: 510,
-          fontSize: "1em",
-          padding: "5.8px 13px",
-          outline: "none",
-          cursor: "pointer",
-        }}
-        aria-label="Computer difficulty"
-      >
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-      </select>
+        gap: 16,
+        flexDirection: isMobile ? "column" : "row"
+      }}>
+        <label
+          htmlFor="difficulty"
+          style={{
+            color: "#ffffff",
+            fontSize: isMobile ? "8px" : "10px",
+            textShadow: '1px 1px 0 rgba(0,0,0,0.8)',
+            letterSpacing: "1px"
+          }}
+        >
+          COMPUTER DIFFICULTY:
+        </label>
+        <select
+          id="difficulty"
+          value={difficulty}
+          onChange={onChange}
+          className="retro-select"
+          aria-label="Computer difficulty"
+        >
+          <option value="easy">EASY</option>
+          <option value="medium">MEDIUM</option>
+          <option value="hard">HARD</option>
+        </select>
+      </div>
     </div>
   );
 }

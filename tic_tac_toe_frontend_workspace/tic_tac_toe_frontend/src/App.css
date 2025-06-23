@@ -1,33 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 :root {
-  --base-light: #00ffff;
-  --base-dark: #00008b;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
+  /* Retro Nintendo Color Palette */
+  --nintendo-red: #dc143c;
+  --nintendo-blue: #0066cc;
+  --nintendo-grey: #8b956d;
+  --nintendo-dark-grey: #2d2d2d;
+  --nintendo-light-grey: #d3d3d3;
+  --nintendo-green: #00a86b;
+  --nintendo-yellow: #ffd700;
+  --nintendo-bg: #1a1a1a;
+  --nintendo-screen: #9bbc0f;
+  --nintendo-screen-dark: #8bac0f;
+  --nintendo-screen-darker: #306230;
+  --nintendo-screen-darkest: #0f380f;
+  
+  /* Text colors */
+  --text-primary: #ffffff;
+  --text-secondary: #d3d3d3;
+  --text-accent: #ffd700;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  background-color: var(--base-dark);
-  color: var(--text-color);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Press Start 2P', monospace;
+  background: 
+    linear-gradient(90deg, transparent 98%, rgba(0,255,0,0.03) 100%),
+    linear-gradient(180deg, transparent 98%, rgba(0,255,0,0.03) 100%),
+    radial-gradient(circle at center, var(--nintendo-bg) 0%, #000000 100%);
+  background-size: 4px 4px, 4px 4px, 100% 100%;
+  color: var(--text-primary);
+  -webkit-font-smoothing: pixelated;
+  -moz-osx-font-smoothing: unset;
+  image-rendering: pixelated;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scanline Effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 0, 0.02) 2px,
+    rgba(0, 255, 0, 0.02) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
 }
 
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .navbar {
-  background-color: var(--base-dark);
+  background: linear-gradient(135deg, var(--nintendo-red) 0%, #aa0000 100%);
   padding: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 4px solid var(--nintendo-dark-grey);
+  box-shadow: 
+    inset 0 2px 0 rgba(255,255,255,0.3),
+    inset 0 -2px 0 rgba(0,0,0,0.3),
+    0 4px 8px rgba(0,0,0,0.5);
   position: fixed;
   top: 0;
   width: 100%;
@@ -36,15 +86,19 @@ body {
 }
 
 .logo {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: normal;
   display: flex;
   align-items: center;
   gap: 8px;
+  color: var(--text-primary);
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
 }
 
 .logo-symbol {
-  color: var(--base-light);
+  color: var(--nintendo-yellow);
+  font-size: 16px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
 }
 
 .container {
@@ -66,43 +120,309 @@ body {
 }
 
 .subtitle {
-  color: var(--base-light);
-  font-weight: 500;
-  font-size: 1.1rem;
+  color: var(--nintendo-yellow);
+  font-weight: normal;
+  font-size: 10px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+  letter-spacing: 2px;
 }
 
 .title {
-  font-size: 3.5rem;
-  font-weight: 600;
-  line-height: 1.2;
+  font-size: 24px;
+  font-weight: normal;
+  line-height: 1.4;
   margin: 0;
+  color: var(--text-primary);
+  text-shadow: 3px 3px 0 rgba(0,0,0,0.8);
+  letter-spacing: 2px;
 }
 
 .description {
-  font-size: 1.1rem;
-  line-height: 1.5;
+  font-size: 8px;
+  line-height: 1.8;
   color: var(--text-secondary);
   max-width: 600px;
   margin-bottom: 16px;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.8);
+  letter-spacing: 1px;
 }
 
+/* Retro Nintendo Button Styles */
 .btn {
-  background-color: var(--base-light);
-  color: white;
+  font-family: 'Press Start 2P', monospace;
+  background: linear-gradient(135deg, var(--nintendo-grey) 0%, #6b7559 100%);
+  color: var(--text-primary);
   border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  font-weight: 500;
+  border-radius: 0;
+  padding: 12px 16px;
+  font-size: 8px;
+  font-weight: normal;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.8);
+  box-shadow: 
+    inset 2px 2px 0 rgba(255,255,255,0.3),
+    inset -2px -2px 0 rgba(0,0,0,0.3),
+    2px 2px 4px rgba(0,0,0,0.5);
+  transition: all 0.1s ease;
+  letter-spacing: 1px;
+  min-width: 100px;
 }
 
 .btn:hover {
-  background-color: #7691ff;
+  background: linear-gradient(135deg, #9ba670 0%, #7a8660 100%);
+  transform: translateY(-1px);
+  box-shadow: 
+    inset 2px 2px 0 rgba(255,255,255,0.4),
+    inset -2px -2px 0 rgba(0,0,0,0.4),
+    3px 3px 6px rgba(0,0,0,0.6);
+}
+
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: 
+    inset 2px 2px 0 rgba(0,0,0,0.3),
+    inset -2px -2px 0 rgba(255,255,255,0.1),
+    1px 1px 2px rgba(0,0,0,0.5);
 }
 
 .btn-large {
-  padding: 12px 24px;
-  font-size: 1.1rem;
+  padding: 16px 24px;
+  font-size: 10px;
+}
+
+/* Nintendo-style Game Board */
+.tic-tac-toe-board {
+  background: linear-gradient(135deg, var(--nintendo-screen) 0%, var(--nintendo-screen-dark) 100%);
+  border: 8px solid var(--nintendo-dark-grey);
+  box-shadow: 
+    inset 4px 4px 0 rgba(0,0,0,0.3),
+    inset -4px -4px 0 rgba(255,255,255,0.2),
+    0 8px 16px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+.tic-tac-toe-board::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: linear-gradient(45deg, var(--nintendo-grey) 0%, #a0a0a0 50%, var(--nintendo-grey) 100%);
+  z-index: -1;
+  border-radius: 4px;
+}
+
+/* Nintendo-style Game Squares */
+.ttt-square {
+  font-family: 'Press Start 2P', monospace;
+  background: linear-gradient(135deg, var(--nintendo-screen-darker) 0%, var(--nintendo-screen-darkest) 100%);
+  color: var(--text-primary);
+  border: 3px solid var(--nintendo-dark-grey);
+  border-radius: 0;
+  font-weight: normal;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+  box-shadow: 
+    inset 2px 2px 0 rgba(255,255,255,0.1),
+    inset -2px -2px 0 rgba(0,0,0,0.3),
+    0 2px 4px rgba(0,0,0,0.3);
+  transition: all 0.15s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.ttt-square:hover:not(:disabled) {
+  background: linear-gradient(135deg, #4a7c59 0%, var(--nintendo-screen-darker) 100%);
+  transform: translateY(-1px);
+  box-shadow: 
+    inset 2px 2px 0 rgba(255,255,255,0.2),
+    inset -2px -2px 0 rgba(0,0,0,0.4),
+    0 4px 8px rgba(0,0,0,0.4);
+}
+
+.ttt-square:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 
+    inset 2px 2px 0 rgba(0,0,0,0.4),
+    inset -2px -2px 0 rgba(255,255,255,0.1);
+}
+
+.ttt-square:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* Retro Score Display */
+.retro-scoreboard {
+  background: linear-gradient(135deg, var(--nintendo-dark-grey) 0%, #1a1a1a 100%);
+  border: 4px solid var(--nintendo-grey);
+  box-shadow: 
+    inset 2px 2px 0 rgba(255,255,255,0.2),
+    inset -2px -2px 0 rgba(0,0,0,0.5),
+    0 4px 8px rgba(0,0,0,0.5);
+  padding: 12px 20px;
+  margin: 0 auto 20px auto;
+  max-width: 300px;
+  border-radius: 4px;
+}
+
+.retro-status {
+  background: linear-gradient(135deg, var(--nintendo-dark-grey) 0%, #1a1a1a 100%);
+  border: 3px solid var(--nintendo-grey);
+  box-shadow: 
+    inset 2px 2px 0 rgba(255,255,255,0.2),
+    inset -2px -2px 0 rgba(0,0,0,0.5);
+  padding: 16px;
+  margin: 12px auto 20px auto;
+  max-width: 400px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Retro Options Panel */
+.retro-options {
+  background: linear-gradient(135deg, var(--nintendo-dark-grey) 0%, #2a2a2a 100%);
+  border: 4px solid var(--nintendo-grey);
+  box-shadow: 
+    inset 2px 2px 0 rgba(255,255,255,0.2),
+    inset -2px -2px 0 rgba(0,0,0,0.5),
+    0 4px 8px rgba(0,0,0,0.5);
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 4px;
+  max-width: 500px;
+}
+
+/* Retro Difficulty Selector */
+.retro-difficulty {
+  background: linear-gradient(135deg, var(--nintendo-dark-grey) 0%, #2a2a2a 100%);
+  border: 3px solid var(--nintendo-grey);
+  box-shadow: 
+    inset 2px 2px 0 rgba(255,255,255,0.2),
+    inset -2px -2px 0 rgba(0,0,0,0.5);
+  padding: 16px;
+  margin: 16px auto;
+  border-radius: 4px;
+  max-width: 400px;
+}
+
+.retro-select {
+  font-family: 'Press Start 2P', monospace;
+  background: linear-gradient(135deg, var(--nintendo-light-grey) 0%, #c0c0c0 100%);
+  color: var(--nintendo-dark-grey);
+  border: 3px solid var(--nintendo-dark-grey);
+  border-radius: 0;
+  font-size: 8px;
+  padding: 8px 12px;
+  box-shadow: 
+    inset 2px 2px 0 rgba(255,255,255,0.5),
+    inset -2px -2px 0 rgba(0,0,0,0.3);
+  cursor: pointer;
+  outline: none;
+}
+
+.retro-select:focus {
+  box-shadow: 
+    inset 2px 2px 0 rgba(255,255,255,0.3),
+    inset -2px -2px 0 rgba(0,0,0,0.5),
+    0 0 0 2px var(--nintendo-yellow);
+}
+
+/* Button Variants */
+.btn-primary {
+  background: linear-gradient(135deg, var(--nintendo-red) 0%, #aa0000 100%);
+  color: var(--text-primary);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #f04560 0%, var(--nintendo-red) 100%);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--nintendo-blue) 0%, #0052a3 100%);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #2080ff 0%, var(--nintendo-blue) 100%);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, var(--nintendo-green) 0%, #008555 100%);
+  color: var(--text-primary);
+}
+
+.btn-accent:hover {
+  background: linear-gradient(135deg, #00c77f 0%, var(--nintendo-green) 100%);
+}
+
+.btn-reset {
+  background: linear-gradient(135deg, #666666 0%, #444444 100%);
+  color: var(--text-primary);
+  border: 2px solid var(--nintendo-light-grey);
+}
+
+.btn-reset:hover {
+  background: linear-gradient(135deg, #808080 0%, #666666 100%);
+}
+
+/* Footer styling */
+.retro-footer {
+  background: linear-gradient(135deg, var(--nintendo-dark-grey) 0%, #1a1a1a 100%);
+  border-top: 4px solid var(--nintendo-grey);
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 8px;
+  padding: 20px 0;
+  margin-top: auto;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.8);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .title {
+    font-size: 18px;
+  }
+  
+  .subtitle {
+    font-size: 8px;
+  }
+  
+  .description {
+    font-size: 7px;
+  }
+  
+  .btn {
+    font-size: 7px;
+    padding: 10px 12px;
+  }
+  
+  .logo {
+    font-size: 10px;
+  }
+  
+  .retro-options {
+    padding: 16px;
+  }
+}
+
+/* Animation for winner celebration */
+@keyframes retro-glow {
+  0%, 100% { 
+    box-shadow: 
+      inset 2px 2px 0 rgba(255,255,255,0.3),
+      inset -2px -2px 0 rgba(0,0,0,0.3),
+      0 0 10px var(--nintendo-yellow);
+  }
+  50% { 
+    box-shadow: 
+      inset 2px 2px 0 rgba(255,255,255,0.5),
+      inset -2px -2px 0 rgba(0,0,0,0.5),
+      0 0 20px var(--nintendo-yellow);
+  }
+}
+
+.winner-glow {
+  animation: retro-glow 1s ease-in-out infinite;
 }
